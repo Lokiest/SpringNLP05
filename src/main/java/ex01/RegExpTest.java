@@ -82,16 +82,40 @@ public class RegExpTest {
 		
 		Pattern p = Pattern.compile("cat");
 		Matcher m = p.matcher(str);
-		boolean result = m.find();
+//		boolean result = m.find();
 		StringBuffer sb = new StringBuffer();
-		while(result) {
+		int i = -1;
+		while(m.find()) {
+			System.out.println(m.group());
+			System.out.println(m.start());
+			System.out.println(m.end());
+			i = m.end();
 			m.appendReplacement(sb, "dog");
-			result = m.find();
 		}
+		System.out.println(sb.append(str.substring(i)));
+//		while(result) {
+//			m.appendReplacement(sb, "dog");
+//			result = m.find();
+//		}
 		
-		System.out.println(result);
-		res = sb.toString();
-		System.out.println(res);
+//		System.out.println(result);
+//		res = sb.toString();
+//		System.out.println(res);
+	}
+	
+	public void test6() {
+		String str = "123456-1234567";
+//		Pattern p = Pattern.compile("\\d{6}-\\d{7}");
+		Pattern p = Pattern.compile("\\-\\d{7}");
+		Matcher m = p.matcher(str);
+//		System.out.println(m.find());
+		
+		StringBuffer sb = new StringBuffer();
+		while(m.find()) {
+			m.appendReplacement(sb, "-*******");
+		}
+		System.err.println(sb);
+		
 	}
 	
 	public static void main(String[] args) {
@@ -101,6 +125,7 @@ public class RegExpTest {
 		app.test3();
 		app.test4();
 		app.test5();
+		app.test6();
 
 	}
 
