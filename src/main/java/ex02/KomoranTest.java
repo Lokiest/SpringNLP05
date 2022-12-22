@@ -17,6 +17,25 @@ import kr.co.shineware.nlp.komoran.model.KomoranResult;
 import lombok.extern.log4j.Log4j;
 
 //https://github.com/shineware/KOMORAN
+/*
+ * ====pom.xml================================
+ * <!-- Komoran repository -->
+	<repositories>
+		<repository>
+			<id>jitpack.id</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+	
+	<!--dependencies 부분에 아래 라이브러리 등록-->
+	<!-- https://mvnrepository.com/artifact/com.github.shin285/KOMORAN -->
+		<dependency>
+			<groupId>com.github.shin285</groupId>
+			<artifactId>KOMORAN</artifactId>
+			<version>3.3.4</version>
+		</dependency>
+ * */
+
 
 @Log4j
 public class KomoranTest {
@@ -91,6 +110,10 @@ public class KomoranTest {
 		
 		List<WordCount> wordList = KomoranUtil.getWordCountSortProc(map, 0); //빈도수 2개 이상 나오는 단어 목록
 		System.out.println(wordList);
+		System.out.println("---------------------------------");
+		
+		List<WordCount> wordList2 = KomoranUtil.getWordByTag(str, 0, "NNG", "NNP");
+		System.out.println(wordList2);
 	}
 	
 }

@@ -18,6 +18,9 @@
 	<logger name="ex02">
 		<level value="info" />
 	</logger>
+	<logger name="ex03">
+		<level value="info" />
+	</logger>
 	
 	<logger name="common">
 		<level value="info" />

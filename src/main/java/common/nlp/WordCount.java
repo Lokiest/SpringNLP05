@@ -1,9 +1,13 @@
 package common.nlp;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 //빈도수 내림차순으로 정렬할 수 있도록 Comparable를 구현
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class WordCount implements Comparable<WordCount> {
 	
 	private String word;
