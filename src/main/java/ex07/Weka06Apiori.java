@@ -5,11 +5,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import weka.associations.Apriori;
 import weka.associations.AssociationRule;
 import weka.associations.AssociationRules;
 import weka.associations.Item;
+import weka.classifiers.evaluation.Evaluation;
+import weka.classifiers.rules.OneR;
 import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -55,8 +58,23 @@ public class Weka06Apiori {
 		
 	}
 	
-	private void buildOneR(int topIndex) {
-		// TODO Auto-generated method stub
+	private void buildOneR(int topIndex) throws Exception {
+		System.out.println("-----------buildOneR-----------");
+		data.setClassIndex(topIndex);
+		System.out.println(data.classIndex() +", " + data.classAttribute());
+		
+		Instances train = data.trainCV(10, 0, new Random(1));
+		Instances test = data.testCV(10, 0);
+		Evaluation eval = new Evaluation(train);
+		OneR model = new OneR();
+		eval.crossValidateModel(model, train, 10, new Random(1));
+		
+		model.buildClassifier(train);
+		eval.evaluateModel(model, test);
+		System.out.println("분류 대상 데이터 건 수 : " + (int)eval.numInstances());
+		System.out.println("정분류 건 수 : " + (int)eval.correct());
+		int percent = (int)(eval.correct() / eval.numInstances() * 100);
+		System.out.println("정분류율 : " + percent);
 		
 	}
 
@@ -94,18 +112,24 @@ public class Weka06Apiori {
 		return attrNames;
 	}
 
-	public void printRule(List<AssociationRule> rule_list) throws Exception {
-		for(AssociationRule ar:rule_list) {
-//			Collection<Item> col = ar.getPremise();
-			System.out.println(ar);
-			double metric[] = ar.getMetricValuesForRule();
-			System.out.println("신뢰도 : " + metric[0]);
-			System.out.println("향상도 : " + metric[1]);
-			System.out.println("전조현상 A에 대한 지지도 : " + ar.getPremiseSupport());
-			System.out.println("병행현상 B에 대한 지지도 : " + ar.getConsequenceSupport());
-			System.out.println("전체 지지도 : " + ar.getTotalSupport());
-		}
-	}
+	public void printRule(List<AssociationRule> rule_list) throws Exception{
+		//System.out.println(rule_list);
+				int i=1;
+				for(AssociationRule ar:rule_list) {		
+					System.out.println(i+"*******************");
+					System.out.println(ar);
+					double metric[] =ar.getMetricValuesForRule();
+					System.out.println("신뢰도: "+metric[0]);
+					System.out.println("향상도: "+metric[1]);
+					System.out.println("전조현상 A["+ar.getPremise()+"]에 대한 지지도: "+ar.getPremiseSupport());
+					System.out.println("병행현상 B["+ar.getConsequence()+"]에 대한 지지도: "+ar.getTotalSupport());//premise+consequency
+					System.out.println("전체 지지도 : "+ar.getConsequenceSupport());
+					i++;
+					System.out.println("*********************");
+				}
+		
+	}//--------------------------------------
+
 	
 	private Map<String, Integer> countByItemSets(List<AssociationRule> rule_list) {
 		Map<String, Integer> map = new HashMap<>();
